@@ -63,6 +63,7 @@
           class="mt-4 text-center"
         ></p>
 
+        <div class="flex flex-wrap justify-center">
         <a
           class="addToPaperbackButton inline-block leading-7 mt-4 mx-1 py-2 px-4 text-white bg-[#f64b4b] border-b border-red-700 rounded-full transition-colors duration-100 hover:bg-[#f46565] hover:cursor-pointer"
           @click="addToPaperback()"
@@ -70,6 +71,14 @@
         >
           Aggiungi a Paperback
         </a>
+        <a
+          class="inline-block leading-7 mt-4 mx-1 py-2 px-4 text-white bg-[#3d5a80] border-b border-[#2c4361] rounded-full transition-colors duration-100 hover:bg-[#4a6a94] hover:cursor-pointer"
+          x-show="repository"
+          :href="'legendum://add-paperback-repo?url=' + encodeURIComponent(location.origin + location.pathname.replace(/index\.html$/, ''))"
+        >
+          Aggiungi a Legendum
+        </a>
+        </div>
         <div
           class="mt-4 w-full max-w-md flex items-center gap-2 bg-white/5 border border-white/10 rounded-full pl-4 pr-1 py-1"
           x-show="repository"
@@ -106,7 +115,8 @@
           ></button>
         </div>
         <p x-show="repository" class="mt-2 text-xs text-gray-400 text-center">
-          Per aggiungerlo a mano: Impostazioni › Estensioni › Repository › +
+          Per aggiungerlo a mano: in Paperback Impostazioni › Estensioni › Repository › +,
+          in Legendum Impostazioni › Fonti › Aggiungi repository › Paperback
         </p>
       </header>
 
