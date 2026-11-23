@@ -1,67 +1,84 @@
-# Paperback Extensions
+<div align="center">
 
-Estensioni personali per Paperback 0.9 (e per Legendum, che ne usa lo stesso formato).
+<img src="src/MangaWorldITA/static/icon.png" width="128" alt="MangaWorld ITA">
 
-| Estensione | Sito | Cosa fa |
-|---|---|---|
-| `MangaWorldITA` | [www.mangaworld.me](https://www.mangaworld.me) | Esplora (tendenze, ultimi capitoli, più letti, ultime aggiunte, più votati, generi, tipologie), ricerca con ordinamenti e filtri, dettagli, capitoli, pagine |
+# MangaWorld ITA per Paperback
 
-## Aggiungere il repository
+**Migliaia di manga, manhwa e manhua in italiano, direttamente nel tuo lettore.**
 
-Il workflow pubblica il repository su GitHub Pages a ogni push su `master`:
+[![Paperback 0.9](https://img.shields.io/badge/Paperback-0.9-ee6c4d?style=for-the-badge)](https://paperback.moe)
+[![Lingua: italiano](https://img.shields.io/badge/lingua-italiano-3d5a80?style=for-the-badge)](#)
+[![Sito: mangaworld.me](https://img.shields.io/badge/sito-mangaworld.me-0a0c11?style=for-the-badge)](https://www.mangaworld.me)
+
+### [➕ Aggiungi a Paperback](https://dimpemekug.github.io/Paperback-Extensions/)
+
+</div>
+
+---
+
+## ✨ Cosa trovi
+
+| | |
+|---|---|
+| 🔥 **Capitoli di tendenza** | Le uscite di cui tutti parlano, in primo piano |
+| 🆕 **Ultimi capitoli** | Ogni nuovo capitolo appena esce, da scorrere senza fine |
+| 🏆 **Più letti e più votati** | Le classifiche di sempre della community |
+| 📚 **Ultime aggiunte** | Le serie appena arrivate nel catalogo |
+| 🎭 **Generi e tipologie** | Shounen, romantico, fantasy… manga, manhwa, manhua: un tocco e ci sei |
+| 🔎 **Ricerca completa** | Per titolo, con 8 ordinamenti e filtri per genere, tipologia e stato |
+| 📖 **Schede dettagliate** | Trama, autori, stato, voto e capitoli divisi per volume |
+
+## 📲 Installazione
+
+1. Dall'iPhone o dall'iPad apri la pagina del repository:
+   **[dimpemekug.github.io/Paperback-Extensions](https://dimpemekug.github.io/Paperback-Extensions/)**
+2. Tocca **Aggiungi a Paperback**: l'app si apre con il repository pronto.
+3. Installa **MangaWorld ITA** e inizia a leggere.
+
+<details>
+<summary>Preferisci aggiungerlo a mano?</summary>
+
+<br>
+
+In Paperback vai in **Impostazioni › Estensioni › Repository**, tocca **+** e incolla:
 
 ```
 https://dimpemekug.github.io/Paperback-Extensions/
 ```
 
-- **Legendum**: Impostazioni › Fonti › Aggiungi repository › Paperback, e incolla l'indirizzo qui sopra.
-- **Paperback**: apri `paperback://addRepo?url=https://dimpemekug.github.io/Paperback-Extensions/`
-  oppure Impostazioni › Estensioni › Repository › aggiungi l'indirizzo.
+</details>
 
-## Se MangaWorld cambia di nuovo indirizzo
+## 🌐 Il sito ha cambiato indirizzo?
 
-Nelle impostazioni della fonte c'è il campo **Dominio**: basta scriverci il nuovo indirizzo
-(per esempio `https://www.mangaworld.xx`), senza aggiornare l'estensione. Se cambia anche il tema,
-vanno aggiornati i selettori in `src/MangaWorldITA/parsers.ts` e le pagine di prova in `tests/fixtures/`.
+Nessun problema. Apri le **impostazioni dell'estensione**, scrivi il nuovo indirizzo nel campo
+**Dominio** e continua a leggere: non serve aspettare un aggiornamento.
 
-## Struttura
+## 💬 Domande frequenti
 
-```
-src/MangaWorldITA/
-├── pbconfig.ts     nome, versione, lingua, capacità
-├── main.ts         l'estensione: rete, sezioni, ricerca, impostazioni
-├── parsers.ts      lettura dell'HTML, senza dipendenze da Paperback (provabile offline)
-└── static/icon.png
-assets/             icone in SVG (static/icon.png si rigenera con rsvg-convert)
-src/tests/          suite live di paperback-cli (sito vero)
-tests/              test offline dei parser sulle pagine salvate in tests/fixtures/
-```
+<details>
+<summary><b>Devo avere un account MangaWorld?</b></summary>
+<br>
+No. L'estensione legge solo le pagine pubbliche del sito: libreria, progressi e download restano nell'app.
+</details>
 
-## Comandi
+<details>
+<summary><b>Una serie non si apre o mancano dei capitoli.</b></summary>
+<br>
+Controlla prima che la serie si apra su <a href="https://www.mangaworld.me">mangaworld.me</a>. Se sul sito funziona,
+apri una <a href="../../issues">segnalazione</a> con il titolo della serie.
+</details>
 
-```bash
-npm install
-npm test            # controllo dei tipi + test offline dei parser
-npm run test:live   # suite di paperback-cli contro il sito vero (scarica Node 24 con npx)
-npm run bundle      # crea bundles/ (versioning.json, index.js, icona)
-rsvg-convert -w 512 -h 512 assets/icon-mangaworld.svg -o src/MangaWorldITA/static/icon.png
-npm run serve       # serve bundles/ in rete locale, per provarla su iPhone prima del push
-```
+<details>
+<summary><b>Ci sono i contenuti per adulti?</b></summary>
+<br>
+Le serie con generi per adulti o maturi sono segnate come tali, così l'app le mostra solo se lo hai scelto tu.
+</details>
 
-Per pubblicare una nuova versione: alza `version` in `src/MangaWorldITA/pbconfig.ts`, poi push.
-Le app vedono l'aggiornamento solo se la versione cambia.
+---
 
-## Cosa resta fuori
-
-- **Test live in CI**: il sito può bloccare gli indirizzi di GitHub Actions, quindi la CI esegue solo i
-  test offline. La suite live va lanciata a mano prima di un rilascio.
-- **Bookmark e voti del sito**: servono l'account MangaWorld; l'estensione legge solo pagine pubbliche.
-- **MangaWorldAdult**: è un sito a parte, non incluso.
-
-## Controlli a mano nell'app
-
-1. Aggiungi il repository e installa *MangaWorld ITA*.
-2. Esplora: le sezioni si aprono e scorrono alla pagina successiva; un genere apre una ricerca filtrata.
-3. Cerca "one piece", apri la serie, controlla trama, generi e numero di capitoli.
-4. Leggi un capitolo fino in fondo e scaricane uno.
-5. Impostazioni della fonte: cambia il dominio e poi ripristinalo.
+<div align="center">
+<sub>
+Estensione non ufficiale, non affiliata a MangaWorld né a Paperback.<br>
+Tutti i contenuti appartengono ai rispettivi autori ed editori: se ti piace una serie, sostienila con l'edizione ufficiale.
+</sub>
+</div>
