@@ -1,0 +1,36 @@
+{
+  "buildTime": "2026-11-23T09:09:42.655Z",
+  "builtWith": {
+    "toolchain": "1.0.0-alpha.95",
+    "types": "1.0.0-alpha.95"
+  },
+  "repository": {
+    "name": "paperback-extensions",
+    "description": "Personal Paperback 0.9 extensions."
+  },
+  "sources": [
+    {
+      "name": "MangaWorld ITA",
+      "description": "Manga, manhwa e manhua in italiano da MangaWorld (www.mangaworld.me).",
+      "version": "1.0.0",
+      "icon": "icon.png",
+      "language": "it",
+      "contentRating": "MATURE",
+      "capabilities": [
+        1,
+        4,
+        64,
+        32,
+        16
+      ],
+      "badges": [],
+      "developers": [
+        {
+          "name": "dimpemekug",
+          "github": "https://github.com/dimpemekug"
+        }
+      ],
+      "id": "MangaWorldITA"
+    }
+  ]
+}
