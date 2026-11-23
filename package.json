@@ -1,7 +1,7 @@
 {
-  "name": "paperback-extensions",
+  "name": "Paperback Extensions",
   "private": true,
-  "description": "Personal Paperback 0.9 extensions.",
+  "description": "Estensioni Paperback per leggere manga in italiano.",
   "type": "module",
   "scripts": {
     "tsc": "tsc",
