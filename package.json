@@ -1,0 +1,23 @@
+{
+  "name": "paperback-extensions",
+  "private": true,
+  "description": "Personal Paperback 0.9 extensions.",
+  "type": "module",
+  "scripts": {
+    "tsc": "tsc",
+    "bundle": "paperback-cli bundle",
+    "serve": "paperback-cli serve",
+    "test": "npm run tsc && npm run test:unit",
+    "test:unit": "tsx --test tests/*.test.ts",
+    "test:live": "npx -y node@24 node_modules/.bin/paperback-cli test --output ./bundles/tests.json"
+  },
+  "devDependencies": {
+    "@paperback/toolchain": "^1.0.0-alpha.95",
+    "@paperback/types": "^1.0.0-alpha.95",
+    "@types/chai": "^5.2.3",
+    "chai": "^6.3.0",
+    "cheerio": "^1.2.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
