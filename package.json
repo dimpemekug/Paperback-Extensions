@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "tsc": "tsc",
-    "bundle": "paperback-cli bundle",
+    "bundle": "paperback-cli bundle && node scripts/customize-homepage.mjs",
     "serve": "paperback-cli serve",
     "test": "npm run tsc && npm run test:unit",
     "test:unit": "tsx --test tests/*.test.ts",

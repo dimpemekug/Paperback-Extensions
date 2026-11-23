@@ -30,23 +30,21 @@
 
 ## 📲 Installazione
 
-1. Dall'iPhone o dall'iPad apri la pagina del repository:
-   **[dimpemekug.github.io/Paperback-Extensions](https://dimpemekug.github.io/Paperback-Extensions/)**
-2. Tocca **Aggiungi a Paperback**: l'app si apre con il repository pronto.
-3. Installa **MangaWorld ITA** e inizia a leggere.
-
-<details>
-<summary>Preferisci aggiungerlo a mano?</summary>
-
-<br>
-
-In Paperback vai in **Impostazioni › Estensioni › Repository**, tocca **+** e incolla:
+### 🔗 Indirizzo del repository
 
 ```
 https://dimpemekug.github.io/Paperback-Extensions/
 ```
 
-</details>
+<sub>Usa il pulsante di copia a destra del riquadro.</sub>
+
+**Con un tocco:** dall'iPhone o dall'iPad apri
+**[la pagina del repository](https://dimpemekug.github.io/Paperback-Extensions/)** e tocca **Aggiungi a Paperback**.
+Su quella pagina trovi anche il pulsante **Copia indirizzo**.
+
+**A mano:** in Paperback vai in **Impostazioni › Estensioni › Repository**, tocca **+** e incolla l'indirizzo.
+
+Poi installa **MangaWorld ITA** e inizia a leggere.
 
 ## 🌐 Il sito ha cambiato indirizzo?
 
