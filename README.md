@@ -32,6 +32,7 @@ src/MangaWorldITA/
 ├── main.ts         l'estensione: rete, sezioni, ricerca, impostazioni
 ├── parsers.ts      lettura dell'HTML, senza dipendenze da Paperback (provabile offline)
 └── static/icon.png
+assets/             icone in SVG (static/icon.png si rigenera con rsvg-convert)
 src/tests/          suite live di paperback-cli (sito vero)
 tests/              test offline dei parser sulle pagine salvate in tests/fixtures/
 ```
@@ -43,6 +44,7 @@ npm install
 npm test            # controllo dei tipi + test offline dei parser
 npm run test:live   # suite di paperback-cli contro il sito vero (scarica Node 24 con npx)
 npm run bundle      # crea bundles/ (versioning.json, index.js, icona)
+rsvg-convert -w 512 -h 512 assets/icon-mangaworld.svg -o src/MangaWorldITA/static/icon.png
 npm run serve       # serve bundles/ in rete locale, per provarla su iPhone prima del push
 ```
 
