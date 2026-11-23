@@ -3,10 +3,10 @@ import { ContentRating, SourceIntents, type ExtensionInfo } from "@paperback/typ
 export default {
   name: "MangaWorld ITA",
   description: "Manga, manhwa e manhua in italiano da MangaWorld (www.mangaworld.me).",
-  version: "1.0.0",
+  version: "1.0.1",
   icon: "icon.png",
   language: "it",
-  contentRating: ContentRating.MATURE,
+  contentRating: ContentRating.EVERYONE,
   capabilities: [
     SourceIntents.CHAPTER_PROVIDING,
     SourceIntents.DISCOVER_SECTION_PROVIDING,
