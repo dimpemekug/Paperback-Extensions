@@ -1,12 +1,12 @@
 {
-  "buildTime": "2026-11-23T09:09:42.655Z",
+  "buildTime": "2026-11-23T09:13:29.474Z",
   "builtWith": {
     "toolchain": "1.0.0-alpha.95",
     "types": "1.0.0-alpha.95"
   },
   "repository": {
-    "name": "paperback-extensions",
-    "description": "Personal Paperback 0.9 extensions."
+    "name": "Paperback Extensions",
+    "description": "Estensioni Paperback per leggere manga in italiano."
   },
   "sources": [
     {
