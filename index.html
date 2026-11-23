@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
   <head>
     <meta name="robots" content="noindex" />
     <meta charset="utf-8" />
@@ -68,8 +68,46 @@
           @click="addToPaperback()"
           x-show="repository"
         >
-          Add Repository to Paperback
+          Aggiungi a Paperback
         </a>
+        <div
+          class="mt-4 w-full max-w-md flex items-center gap-2 bg-white/5 border border-white/10 rounded-full pl-4 pr-1 py-1"
+          x-show="repository"
+          x-data="{
+            address: location.origin + location.pathname.replace(/index\.html$/, ''),
+            copied: false,
+            async copy() {
+              try {
+                await navigator.clipboard.writeText(this.address);
+              } catch {
+                const field = this.$refs.address;
+                field.select();
+                document.execCommand('copy');
+              }
+              this.copied = true;
+              setTimeout(() => (this.copied = false), 2000);
+            },
+          }"
+        >
+          <input
+            x-ref="address"
+            :value="address"
+            readonly
+            aria-label="Indirizzo del repository"
+            class="flex-1 min-w-0 bg-transparent text-sm font-mono text-gray-300 outline-none truncate"
+            @focus="$event.target.select()"
+          />
+          <button
+            type="button"
+            @click="copy()"
+            class="shrink-0 py-1.5 px-4 text-sm rounded-full text-white transition-colors duration-100"
+            :class="copied ? 'bg-green-600' : 'bg-white/15 hover:bg-white/25'"
+            x-text="copied ? 'Copiato ✓' : 'Copia indirizzo'"
+          ></button>
+        </div>
+        <p x-show="repository" class="mt-2 text-xs text-gray-400 text-center">
+          Per aggiungerlo a mano: Impostazioni › Estensioni › Repository › +
+        </p>
       </header>
 
       <div class="mx-auto text-left">
