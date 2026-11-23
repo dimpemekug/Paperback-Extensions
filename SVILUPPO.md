@@ -33,7 +33,7 @@ src/MangaWorldITA/
 ├── main.ts         l'estensione: rete, sezioni, ricerca, impostazioni
 ├── parsers.ts      lettura dell'HTML, senza dipendenze da Paperback (provabile offline)
 └── static/icon.png
-scripts/            customize-homepage.mjs: indirizzo e «Copia indirizzo» nella pagina del repository
+scripts/            customize-homepage.mjs: pulsante Legendum, indirizzo e «Copia indirizzo» nella pagina
 assets/             icone in SVG (static/icon.png si rigenera con rsvg-convert)
 src/tests/          suite live di paperback-cli (sito vero)
 tests/              test offline dei parser sulle pagine salvate in tests/fixtures/

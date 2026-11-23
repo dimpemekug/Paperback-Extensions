@@ -1,5 +1,6 @@
-// Adds the repository address, with a copy button, under the "add" button of the
-// homepage paperback-cli generates in bundles/index.html. Run after `paperback-cli bundle`.
+// Customises the homepage paperback-cli generates in bundles/index.html: an "add" button
+// for Legendum beside Paperback's, and the repository address with a copy button.
+// Run after `paperback-cli bundle`.
 
 import { readFileSync, writeFileSync } from "node:fs";
 
@@ -48,10 +49,24 @@ const addressBox = `
           ></button>
         </div>
         <p x-show="repository" class="mt-2 text-xs text-gray-400 text-center">
-          Per aggiungerlo a mano: Impostazioni › Estensioni › Repository › +
+          Per aggiungerlo a mano: in Paperback Impostazioni › Estensioni › Repository › +,
+          in Legendum Impostazioni › Fonti › Aggiungi repository › Paperback
         </p>`;
 
-html = html.replace(button, `$1\n          Aggiungi a Paperback\n        $2${addressBox}`);
+// Legendum opens `legendum://add-paperback-repo?url=…` the same way Paperback opens its own link.
+const legendumButton = `
+        <a
+          class="inline-block leading-7 mt-4 mx-1 py-2 px-4 text-white bg-[#3d5a80] border-b border-[#2c4361] rounded-full transition-colors duration-100 hover:bg-[#4a6a94] hover:cursor-pointer"
+          x-show="repository"
+          :href="'legendum://add-paperback-repo?url=' + encodeURIComponent(location.origin + location.pathname.replace(/index\\.html$/, ''))"
+        >
+          Aggiungi a Legendum
+        </a>`;
+
+html = html.replace(
+  button,
+  `<div class="flex flex-wrap justify-center">\n        $1\n          Aggiungi a Paperback\n        $2${legendumButton}\n        </div>${addressBox}`,
+);
 html = html.replace(/<html lang="en">/, '<html lang="it">');
 writeFileSync(path, html);
 console.log(`${path}: address box added`);
