@@ -1,613 +1,431 @@
 <!doctype html>
+<!--
+  Pagina dei repository di estensioni manga. Lo stesso file, identico, sta in
+  Aidoku-Extensions/site/index.html e in Paperback-Extensions/site/index.html:
+  capisce da solo il formato del repository (index.min.json per Aidoku,
+  versioning.json per Paperback). Se lo cambi in un repo, copialo nell'altro.
+-->
 <html lang="it">
-  <head>
-    <meta name="robots" content="noindex" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="icon.png" />
-    <link rel="apple-touch-icon" href="icon.png" />
-    <title>Loading...</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Estensioni manga</title>
+  <meta name="description" content="Fonti per leggere manga, manhwa e manhua in italiano in Legendum, Aidoku e Paperback su iPhone e iPad. Gratuite, senza pubblicità e senza account.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#110d1a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8f5fc" media="(prefers-color-scheme: light)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Estensioni manga">
+  <meta property="og:description" content="Fonti per leggere manga, manhwa e manhua in italiano in Legendum, Aidoku e Paperback.">
+  <meta property="og:image" content="https://dimpemekug.com/progetti/manga-extensions/og.png">
+  <meta property="og:locale" content="it_IT">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <style>
+    :root {
+      --bg: #110d1a;
+      --surface: rgba(255, 255, 255, .045);
+      --surface-strong: rgba(255, 255, 255, .08);
+      --border: rgba(255, 255, 255, .1);
+      --text: #f4f0fa;
+      --muted: #a79fb8;
+      --accent: #e0479a;
+      --gradient: linear-gradient(135deg, #ff4f6c 0%, #c03aa8 50%, #7430d8 100%);
+      --glow: rgba(192, 58, 168, .35);
+      --ok: #3ccf8e;
+      --radius: 16px;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8f5fc;
+        --surface: #ffffff;
+        --surface-strong: #f0eaf7;
+        --border: rgba(60, 20, 90, .12);
+        --text: #1d1428;
+        --muted: #6b6079;
+        --accent: #b0307f;
+        --glow: rgba(192, 58, 168, .18);
+        --ok: #128a57;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+      font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background-image: radial-gradient(60rem 28rem at 50% -6rem, var(--glow), transparent 70%);
+      background-repeat: no-repeat;
+    }
+    a { color: var(--accent); }
+    main {
+      max-width: 680px; margin: 0 auto;
+      padding: max(40px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 32px max(20px, env(safe-area-inset-left));
+    }
 
-  <body
-    class="bg-[#1b1b1f] text-gray-200 font-[Inter] p-4 md:p-8 lg:p-12 text-center"
-    x-data="repositoryData()"
-    x-init="await initialize()"
-  >
-    <div class="container mx-auto max-w-7xl">
-      <header class="flex flex-col items-center relative mt-4">
-        <div
-          class="absolute w-28 h-28 md:w-40 md:h-40 -top-4 left-1/2 -translate-x-1/2 rounded-full"
-          style="
-            background:
-              radial-gradient(
-                circle at 30% 30%,
-                rgba(84, 120, 219, 0.4) 0%,
-                transparent 70%
-              ),
-              radial-gradient(
-                circle at 70% 70%,
-                rgba(246, 75, 75, 0.4) 0%,
-                transparent 70%
-              );
-            filter: blur(25px);
-          "
-        ></div>
-        <div class="relative z-10">
-          <img
-            class="md:max-h-32 max-h-20 rounded-lg"
-            src="icon.png"
-            alt=""
-          />
-        </div>
+    header { text-align: center; }
+    .logo {
+      width: 104px; height: 104px; border-radius: 23%; display: block; margin: 0 auto 20px;
+      box-shadow: 0 12px 40px var(--glow), 0 0 0 1px var(--border);
+    }
+    .kicker {
+      display: inline-block; margin: 0 0 10px; padding: 3px 12px; border-radius: 999px;
+      background: var(--surface-strong); border: 1px solid var(--border);
+      color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: .02em;
+    }
+    h1 { margin: 0; font-size: clamp(28px, 7vw, 38px); line-height: 1.15; letter-spacing: -.02em; }
+    .lead { margin: 10px auto 0; max-width: 32em; color: var(--muted); font-size: 17px; }
 
-        <h1
-          x-show="repository"
-          x-text="repository?.name"
-          class="text-xl mt-4 md:text-3xl font-bold"
-        ></h1>
+    .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 50px; padding: 12px 24px; border-radius: 14px;
+      font-size: 17px; font-weight: 600; text-decoration: none; cursor: pointer;
+      transition: transform .12s ease, filter .12s ease, background .12s ease;
+    }
+    .button:active { transform: scale(.98); }
+    .button.primary { color: #fff; background: var(--gradient); box-shadow: 0 6px 20px var(--glow); }
+    .button.primary:hover { filter: brightness(1.08); }
+    .button.secondary { color: var(--text); background: var(--surface); border: 1.5px solid var(--border); }
+    .button.secondary:hover { background: var(--surface-strong); }
+    .button:focus-visible, button:focus-visible, input:focus-visible, a:focus-visible {
+      outline: 3px solid var(--accent); outline-offset: 2px;
+    }
+    .other { margin: 16px 0 0; font-size: 14px; color: var(--muted); }
 
-        <p
-          x-show="repository"
-          x-text="repository?.description"
-          class="mt-4 text-center"
-        ></p>
+    section { margin-top: 40px; }
+    h2 { margin: 0 0 14px; font-size: 20px; letter-spacing: -.01em; }
+    .count { color: var(--muted); font-weight: 500; }
 
-        <div class="flex flex-wrap justify-center">
-        <a
-          class="addToPaperbackButton inline-block leading-7 mt-4 mx-1 py-2 px-4 text-white bg-[#f64b4b] border-b border-red-700 rounded-full transition-colors duration-100 hover:bg-[#f46565] hover:cursor-pointer"
-          @click="addToPaperback()"
-          x-show="repository"
-        >
-          Aggiungi a Paperback
-        </a>
-        <a
-          class="inline-block leading-7 mt-4 mx-1 py-2 px-4 text-white bg-[#3d5a80] border-b border-[#2c4361] rounded-full transition-colors duration-100 hover:bg-[#4a6a94] hover:cursor-pointer"
-          x-show="repository"
-          :href="'legendum://add-paperback-repo?url=' + encodeURIComponent(location.origin + location.pathname.replace(/index\.html$/, ''))"
-        >
-          Aggiungi a Legendum
-        </a>
-        </div>
-        <div
-          class="mt-4 w-full max-w-md flex items-center gap-2 bg-white/5 border border-white/10 rounded-full pl-4 pr-1 py-1"
-          x-show="repository"
-          x-data="{
-            address: location.origin + location.pathname.replace(/index\.html$/, ''),
-            copied: false,
-            async copy() {
-              try {
-                await navigator.clipboard.writeText(this.address);
-              } catch {
-                const field = this.$refs.address;
-                field.select();
-                document.execCommand('copy');
-              }
-              this.copied = true;
-              setTimeout(() => (this.copied = false), 2000);
-            },
-          }"
-        >
-          <input
-            x-ref="address"
-            :value="address"
-            readonly
-            aria-label="Indirizzo del repository"
-            class="flex-1 min-w-0 bg-transparent text-sm font-mono text-gray-300 outline-none truncate"
-            @focus="$event.target.select()"
-          />
-          <button
-            type="button"
-            @click="copy()"
-            class="shrink-0 py-1.5 px-4 text-sm rounded-full text-white transition-colors duration-100"
-            :class="copied ? 'bg-green-600' : 'bg-white/15 hover:bg-white/25'"
-            x-text="copied ? 'Copiato ✓' : 'Copia indirizzo'"
-          ></button>
-        </div>
-        <p x-show="repository" class="mt-2 text-xs text-gray-400 text-center">
-          Per aggiungerlo a mano: in Paperback Impostazioni › Estensioni › Repository › +,
-          in Legendum Impostazioni › Fonti › Aggiungi repository › Paperback
-        </p>
-      </header>
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px;
+    }
+    .address { display: flex; gap: 10px; align-items: center; }
+    .address code {
+      flex: 1; min-width: 0; font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      word-break: break-all; color: var(--text);
+    }
+    .copy {
+      flex: none; min-height: 40px; padding: 8px 16px; border: 0; border-radius: 10px; cursor: pointer;
+      background: var(--surface-strong); color: var(--text); font: 600 15px/1 inherit; font-family: inherit;
+    }
+    .copy.done { background: var(--ok); color: #fff; }
 
-      <div class="mx-auto text-left">
-        <!-- Error message -->
-        <div
-          x-show="error"
-          class="bg-red-500 text-white p-4 rounded-lg mt-6 text-center"
-        >
-          <p class="font-bold">Error loading repository data</p>
-          <p x-text="error" class="mt-2"></p>
-          <button
-            @click="initialize()"
-            class="mt-2 bg-white text-red-500 px-4 py-1 rounded-lg"
-          >
-            Retry
-          </button>
-        </div>
+    ol.steps { margin: 16px 0 0; padding: 0; list-style: none; counter-reset: step; }
+    ol.steps > li { counter-increment: step; position: relative; padding-left: 40px; margin-top: 14px; }
+    ol.steps > li::before {
+      content: counter(step); position: absolute; left: 0; top: -1px;
+      width: 28px; height: 28px; border-radius: 50%; background: var(--gradient); color: #fff;
+      font-weight: 700; font-size: 14px; display: grid; place-items: center;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 15px; }
+    th, td { text-align: left; padding: 8px 0; border-top: 1px solid var(--border); vertical-align: top; }
+    th { width: 7.5em; padding-right: 12px; font-weight: 600; }
+    td { color: var(--muted); }
 
-        <div class="mt-6 space-y-4" x-show="!error">
-          <div x-show="repository" class="relative">
-            <label
-              for="source-search"
-              class="block text-sm font-medium text-gray-400"
-            >
-              Search
-            </label>
-            <input
-              type="text"
-              id="source-search"
-              x-model="searchTerm"
-              placeholder="Search sources..."
-              class="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5478db]"
-            />
-          </div>
+    .search {
+      width: 100%; min-height: 46px; margin-bottom: 14px; padding: 10px 14px; border-radius: 12px;
+      border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit;
+    }
+    .hint { margin: -6px 0 14px; color: var(--muted); font-size: 14px; }
+    .sources { display: grid; gap: 12px; }
+    .source { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: start; }
+    .source.selectable { cursor: pointer; transition: border-color .12s ease, box-shadow .12s ease; }
+    .source.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .source img { width: 56px; height: 56px; border-radius: 13px; background: var(--surface-strong); }
+    .source .top { display: flex; align-items: flex-start; gap: 8px; }
+    .source h3 { margin: 0; font-size: 17px; flex: 1; min-width: 0; }
+    .source .meta { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+    .source .desc { margin: 8px 0 0; font-size: 15px; }
+    .badge {
+      flex: none; white-space: nowrap; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600;
+      background: var(--surface-strong); color: var(--muted); border: 1px solid var(--border);
+    }
+    .badge.check { background: var(--gradient); color: #fff; border-color: transparent; }
+    .empty { color: var(--muted); }
 
-          <!-- Badge filters -->
-          <div x-show="repository" class="relative">
-            <div class="overflow-x-auto" x-show="availableBadges.length">
-              <label
-                id="badge-filter-label"
-                class="block text-sm font-medium text-gray-400 mb-2"
-              >
-                Filter
-              </label>
-              <div
-                class="inline-flex gap-2 pb-2"
-                role="group"
-                aria-labelledby="badge-filter-label"
-              >
-                <template x-for="badge in availableBadges" :key="badge.label">
-                  <button
-                    @click="toggleBadgeFilter(badge)"
-                    class="px-3 py-2 rounded-lg text-md font-medium transition-all duration-200 shrink-0 hover:cursor-pointer"
-                    :style="selectedBadges.some(b => b.label === badge.label) ?
-                            `background-color: ${badge.backgroundColor}; color: ${badge.textColor};` :
-                            `background-color: ${badge.backgroundColor + '40'}; color: ${badge.textColor};`"
-                    x-text="badge.label"
-                  ></button>
-                </template>
-              </div>
-            </div>
-          </div>
+    .install-bar {
+      position: sticky; bottom: max(16px, env(safe-area-inset-bottom)); margin-top: 16px;
+      display: flex; justify-content: center;
+    }
+    .install-bar[hidden] { display: none; }
 
-          <!-- Sort controls -->
-          <div
-            x-show="repository"
-            class="flex justify-between items-center flex-wrap gap-3"
-          >
-            <div>
-              <p class="font-bold">Available Sources:</p>
-              <p class="text-sm text-gray-400">
-                Click on sources to select them for installation
-              </p>
-            </div>
-          </div>
+    footer { margin-top: 48px; text-align: center; color: var(--muted); font-size: 14px; }
+    footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin-bottom: 12px; }
+    footer nav a { color: var(--text); text-decoration: none; font-weight: 500; }
+    footer nav a:hover { color: var(--accent); }
+    footer p { margin: 4px 0; }
 
-          <div
-            x-show="repository"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <template x-for="source in filteredSources" :key="source.id">
-              <div
-                @click="toggleSource(source.id)"
-                class="bg-zinc-800 rounded-lg shadow-lg overflow-hidden hover:cursor-pointer transition-all duration-200 relative"
-                :class="selectedSources.has(source.id) ? 'ring-2 ring-[#5478db]' : ''"
-                @keydown.enter="toggleSource(source.id)"
-                tabindex="0"
-              >
-                <!-- Desktop Layout -->
-                <div class="hidden md:block">
-                  <div class="p-4 flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                      <img
-                        :src="`${baseUrl}/${source.id}/static/${source.icon}`"
-                        :alt="`${source.name} icon`"
-                        class="w-12 h-12 rounded-full"
-                        loading="lazy"
-                        onerror="
-                          this.src = 'https://paperback.moe/pb-placeholder.png'
-                          this.onerror = ''
-                        "
-                      />
-                      <h3
-                        class="text-xl font-semibold text-gray-200"
-                        x-text="source.name"
-                      ></h3>
-                    </div>
-                    <span
-                      class="px-2 py-1 rounded text-xs font-semibold"
-                      :class="getContentRatingClass(source.contentRating)"
-                      x-text="source.contentRating"
-                    ></span>
-                  </div>
-                  <div class="p-4 border-t border-zinc-700">
-                    <p class="text-gray-300 text-sm mb-2">
-                      Version: <span x-text="source.version"></span>
-                    </p>
-                    <p
-                      class="text-gray-300 mb-4 line-clamp-2 min-h-[3rem]"
-                      x-text="source.description"
-                    ></p>
-                  </div>
-                  <div class="p-4 pt-0">
-                    <div
-                      class="flex flex-nowrap gap-2 overflow-x-auto pb-2"
-                      x-show="source.badges && source.badges.length"
-                    >
-                      <template
-                        x-for="badge in sortBadges(source.badges)"
-                        :key="badge.label"
-                      >
-                        <span
-                          class="px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap shrink-0 transition-all duration-200"
-                          :style="selectedBadges.some(b => b.label === badge.label) ?
-                                  `background-color: ${badge.backgroundColor}; color: ${badge.textColor};` :
-                                  `background-color: ${badge.backgroundColor + '40'}; color: ${badge.textColor};`"
-                          x-text="badge.label"
-                        ></span>
-                      </template>
-                    </div>
-                    <div class="text-gray-400 text-sm flex items-center mt-2">
-                      <span
-                        x-show="selectedSources.has(source.id)"
-                        class="text-[#5478db] text-xs"
-                        >• Selected</span
-                      >
-                    </div>
-                  </div>
-                </div>
-                <!-- Mobile Layout -->
-                <div class="md:hidden p-4">
-                  <div class="flex items-start justify-between">
-                    <div class="flex items-center space-x-3">
-                      <img
-                        :src="`${baseUrl}/${source.id}/static/${source.icon}`"
-                        :alt="`${source.name} icon`"
-                        class="w-12 h-12 rounded-full"
-                        loading="lazy"
-                        onerror="
-                          this.src = 'https://paperback.moe/pb-placeholder.png'
-                          this.onerror = ''
-                        "
-                      />
-                      <div class="flex flex-col space-y-1">
-                        <h3
-                          class="text-lg font-semibold text-gray-200"
-                          x-text="source.name"
-                        ></h3>
-                        <span
-                          class="text-sm text-gray-400"
-                          x-text="`v${source.version}`"
-                        ></span>
-                      </div>
-                    </div>
-                    <span
-                      class="px-2 py-1 rounded text-xs font-semibold shrink-0"
-                      :class="getContentRatingClass(source.contentRating)"
-                      x-text="source.contentRating"
-                    ></span>
-                  </div>
-                  <p
-                    class="text-gray-300 text-sm mt-2 mb-4 line-clamp-2 min-h-[2.5rem]"
-                    x-text="source.description"
-                  ></p>
-                  <div class="mt-2">
-                    <div
-                      class="flex flex-nowrap gap-2 overflow-x-auto pb-2"
-                      x-show="source.badges && source.badges.length"
-                    >
-                      <template
-                        x-for="badge in sortBadges(source.badges)"
-                        :key="badge.label"
-                      >
-                        <span
-                          class="px-2 py-1 rounded text-sm font-medium whitespace-nowrap shrink-0 transition-all duration-200"
-                          :style="selectedBadges.some(b => b.label === badge.label) ?
-                                  `background-color: ${badge.backgroundColor}; color: ${badge.textColor};` :
-                                  `background-color: ${badge.backgroundColor + '40'}; color: ${badge.textColor};`"
-                          x-text="badge.label"
-                        ></span>
-                      </template>
-                    </div>
-                    <span
-                      x-show="selectedSources.has(source.id)"
-                      class="text-[#5478db] text-xs block mt-2"
-                      >• Selected</span
-                    >
-                  </div>
-                </div>
-              </div>
-            </template>
-          </div>
+    @media (max-width: 520px) {
+      main { padding-top: max(28px, env(safe-area-inset-top)); }
+      .buttons { flex-direction: column; }
+      .button { width: 100%; }
+      .address { flex-direction: column; align-items: stretch; }
+      .copy { width: 100%; min-height: 44px; }
+      .install-bar .button { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img class="logo" src="icon.png" alt="">
+      <p class="kicker" id="kicker">Repository di estensioni</p>
+      <h1>Estensioni manga</h1>
+      <p class="lead" id="lead">Fonti per leggere manga, manhwa e manhua in italiano.</p>
 
-          <!-- Empty state when no sources match filter -->
-          <div
-            x-show="repository && filteredSources.length === 0"
-            class="p-10 text-center"
-          >
-            <p class="text-lg text-gray-400">
-              No sources found matching your filters
-            </p>
-            <button
-              @click="resetFilters()"
-              class="mt-3 bg-zinc-700 hover:bg-zinc-600 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Reset Filters
-            </button>
-          </div>
-        </div>
+      <div class="buttons">
+        <a class="button primary" id="add-legendum" href="#">Aggiungi a Legendum</a>
+        <a class="button secondary" id="add-app" href="#" hidden></a>
       </div>
-    </div>
+      <p class="other" id="other" hidden></p>
+    </header>
 
-    <!-- Build Information Footer -->
-    <footer
-      class="mt-4 md:mt-12 text-center text-sm text-gray-400"
-      x-show="buildInfo?.buildTime && buildInfo?.builtWith"
-    >
-      <div class="space-y-1">
-        <p>
-          Paperback Toolchain:
-          <span x-text="buildInfo?.builtWith?.toolchain"></span>
-        </p>
-        <p>
-          Paperback Types: <span x-text="buildInfo?.builtWith?.types"></span>
-        </p>
-        <p>
-          Build Time:
-          <span
-            x-text="buildInfo?.buildTime ? new Date(buildInfo.buildTime).toLocaleString() : ''"
-          >
-          </span>
-        </p>
+    <section aria-labelledby="manual-title">
+      <h2 id="manual-title">Aggiungerlo a mano</h2>
+      <div class="card">
+        <div class="address">
+          <code id="address">…</code>
+          <button class="copy" id="copy" type="button">Copia indirizzo</button>
+        </div>
+        <ol class="steps">
+          <li>Copia l'indirizzo del repository.</li>
+          <li>
+            Incollalo nell'app:
+            <table>
+              <tbody id="paths"></tbody>
+            </table>
+          </li>
+          <li>Apri il repository e installa le fonti che ti servono.</li>
+        </ol>
       </div>
+    </section>
+
+    <section aria-labelledby="sources-title">
+      <h2 id="sources-title">Fonti <span class="count" id="count"></span></h2>
+      <input class="search" id="search" type="search" placeholder="Cerca una fonte" aria-label="Cerca una fonte" hidden>
+      <p class="hint" id="hint" hidden>Tocca le fonti da installare in Paperback, poi «Installa».</p>
+      <div class="sources" id="sources"><p class="empty">Caricamento delle fonti…</p></div>
+      <div class="install-bar" id="install-bar" hidden>
+        <a class="button primary" id="install" href="#">Installa in Paperback</a>
+      </div>
+    </section>
+
+    <footer>
+      <nav>
+        <a href="https://dimpemekug.com/progetti/manga-extensions/">Pagina del progetto</a>
+        <a href="https://dimpemekug.com/progetti/manga-extensions/docs/">Documentazione</a>
+        <a id="code" href="https://github.com/dimpemekug">Codice su GitHub</a>
+        <a id="issues" href="https://github.com/dimpemekug">Segnala un problema</a>
+      </nav>
+      <p>Fonti non ufficiali, non affiliate ai siti né ad Aidoku o Paperback.</p>
+      <p>I contenuti appartengono ai loro autori ed editori: se una serie ti piace, sostienila con l'edizione ufficiale.</p>
     </footer>
-
-    <!-- Floating Install Button -->
-    <div
-      x-show="selectedSources.size > 0"
-      class="fixed bottom-6 right-6 z-50"
-      x-transition:enter="transition ease-out duration-200"
-      x-transition:enter-start="opacity-0 translate-y-4"
-      x-transition:enter-end="opacity-100 translate-y-0"
-      x-transition:leave="transition ease-in duration-150"
-      x-transition:leave-start="opacity-100 translate-y-0"
-      x-transition:leave-end="opacity-0 translate-y-4"
-    >
-      <button
-        @click="installSelectedSources()"
-        class="py-3 px-6 bg-[#f64b4b] text-white rounded-full hover:bg-[#f46565] transition-colors duration-100 shadow-lg hover:cursor-pointer flex items-center space-x-2"
-      >
-        <span>Install</span>
-        <span
-          class="bg-white/25 px-2 py-0.5 rounded-full text-sm"
-          x-text="selectedSources.size"
-        ></span>
-      </button>
-    </div>
-  </body>
+  </main>
 
   <script>
-    document.addEventListener('alpine:init', () => {
-      Alpine.data('repositoryData', () => ({
-        baseUrl: window.location
-          .toString()
-          .replace('index.html', '')
-          .replace(/\/$/, ''),
-        repository: null,
-        sources: [],
-        selectedSources: new Set(),
-        buildInfo: null,
-        searchTerm: '',
-        selectedBadges: [],
-        availableBadges: [],
-        error: null,
+    "use strict";
 
-        get filteredSources() {
-          return this.sources.filter((source) => {
-            // Text search filter
-            const matchesSearch =
-              source.name
-                .toLowerCase()
-                .includes(this.searchTerm.toLowerCase()) ||
-              source.description
-                .toLowerCase()
-                .includes(this.searchTerm.toLowerCase())
+    // Le due versioni del repository, per i link incrociati e per GitHub.
+    const REPOS = {
+      aidoku: {
+        app: "Aidoku", repo: "Aidoku-Extensions", list: "index.min.json",
+        add: (list) => "aidoku://addSourceList?url=" + list,
+        legendum: (list) => "legendum://add-repo?url=" + encodeURIComponent(list),
+        path: "Impostazioni › Liste di fonti › +",
+        legendumPath: "Impostazioni › Fonti › Aggiungi repository › Aidoku",
+      },
+      paperback: {
+        app: "Paperback", repo: "Paperback-Extensions", list: "versioning.json",
+        // Come la pagina di paperback-cli: cartella del repository senza slash finale.
+        add: (base, name) => "paperback://addRepo?displayName=" + encodeURI(name) + "&url=" + encodeURI(base),
+        legendum: (base) => "legendum://add-paperback-repo?url=" + encodeURIComponent(base),
+        path: "Impostazioni › Estensioni › Repository › +",
+        legendumPath: "Impostazioni › Fonti › Aggiungi repository › Paperback",
+      },
+    };
+    const RATINGS = {
+      0: "Per tutti", 1: "Contenuti maturi", 2: "Per adulti",
+      SAFE: "Per tutti", EVERYONE: "Per tutti", MATURE: "Contenuti maturi", ADULT: "Per adulti",
+    };
+    const $ = (id) => document.getElementById(id);
+    const el = (tag, className, text) => {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text != null) node.textContent = text;
+      return node;
+    };
 
-            // Badge filter
-            const matchesBadges =
-              this.selectedBadges.length === 0 ||
-              this.selectedBadges.every((selectedBadge) =>
-                source.badges?.some(
-                  (badge) => badge.label === selectedBadge.label
-                )
-              )
+    const folder = location.href.split(/[?#]/)[0].replace(/index\.html$/, "");
+    const base = folder.replace(/\/$/, "");
+    const languageNames = (() => {
+      try { return new Intl.DisplayNames(["it"], { type: "language" }); } catch { return null; }
+    })();
+    const language = (code) => {
+      const name = (languageNames && code && languageNames.of(code)) || code || "";
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    };
 
-            return matchesSearch && matchesBadges
-          })
-        },
+    async function load() {
+      // Prima il formato che suggerisce l'indirizzo, per non chiedere un file che non c'è.
+      const formats = /paperback/i.test(location.pathname) ? ["paperback", "aidoku"] : ["aidoku", "paperback"];
+      for (const format of formats) {
+        try {
+          const response = await fetch(new URL(REPOS[format].list, folder), { cache: "no-cache" });
+          if (response.ok) return { format, data: await response.json() };
+        } catch { /* prova il formato successivo */ }
+      }
+      throw new Error("elenco delle fonti non trovato");
+    }
 
-        getCapabilityBadges(capabilities) {
-          const badges = []
-          const intents = {
-            CHAPTER_PROVIDING: 1,
-            PROGRESS_PROVIDING: 2,
-            DISCOVER_SECTION_PROVIDING: 4,
-            MANAGED_COLLECTION_PROVIDING: 8,
-            CLOUDFLARE_BYPASS_PROVIDING: 16,
-            SETTINGS_FORM_PROVIDING: 32,
-            SEARCH_RESULT_PROVIDING: 64,
-          }
+    function setup(format, data) {
+      const repo = REPOS[format];
+      const other = REPOS[format === "aidoku" ? "paperback" : "aidoku"];
+      const address = format === "aidoku" ? new URL(repo.list, folder).href : folder;
+      const name = (data.repository && data.repository.name) || data.name || repo.repo;
 
-          // Show badges for capabilities that can be user-facing
-          const capabilityLabels = {
-            MANGA_CHAPTERS: {
-              label: 'Content Provider',
-              textColor: '#FFFFFF',
-              backgroundColor: '#4A90E2',
-              type: 'capability',
-            },
-            MANGA_PROGRESS: {
-              label: 'Tracker',
-              textColor: '#FFFFFF',
-              backgroundColor: '#50C878',
-              type: 'capability',
-            },
-            COLLECTION_MANAGEMENT: {
-              label: 'Collections Manager',
-              textColor: '#FFFFFF',
-              backgroundColor: '#E67E22',
-              type: 'capability',
-            },
-            CLOUDFLARE_BYPASS: {
-              label: 'Cloudflare',
-              textColor: '#FFFFFF',
-              backgroundColor: '#E74C3C',
-              type: 'capability',
-            },
-          }
+      document.title = `Estensioni manga · Repository ${repo.app}`;
+      $("kicker").textContent = `Repository ${repo.app}`;
+      $("lead").textContent = `Fonti per leggere manga, manhwa e manhua in italiano in Legendum e ${repo.app}.`;
 
-          // Handle both bit string and array formats
-          const capabilityValues = Array.isArray(capabilities)
-            ? capabilities
-            : Object.entries(intents)
-                .filter(([_, value]) => (capabilities & value) === value)
-                .map(([_, value]) => value)
+      $("add-legendum").href = repo.legendum(format === "aidoku" ? address : base);
+      const add = $("add-app");
+      add.textContent = `Aggiungi ${repo.app === "Aidoku" ? "ad" : "a"} ${repo.app}`;
+      add.href = repo.add(format === "aidoku" ? address : base, name);
+      add.hidden = false;
 
-          for (const [key, value] of Object.entries(intents)) {
-            if (capabilityValues.includes(value) && capabilityLabels[key]) {
-              badges.push(capabilityLabels[key])
-            }
-          }
+      const otherLink = el("a", null, `repository ${other.app}`);
+      otherLink.href = new URL(`../${other.repo}/`, folder).href;
+      $("other").append(`Usi ${other.app}? C'è anche il `, otherLink, ".");
+      $("other").hidden = false;
 
-          return badges
-        },
+      $("address").textContent = address;
+      for (const [app, path] of [["Legendum", repo.legendumPath], [repo.app, repo.path]]) {
+        const row = el("tr");
+        row.append(el("th", null, app), el("td", null, path));
+        $("paths").append(row);
+      }
 
-        async initialize() {
-          try {
-            this.error = null
-            const response = await fetch(`${this.baseUrl}/versioning.json`)
+      const github = `https://github.com/dimpemekug/${repo.repo}`;
+      $("code").href = github;
+      $("issues").href = `${github}/issues`;
+    }
 
-            if (!response.ok) {
-              throw new Error(
-                `Failed to load repository data (${response.status})`
-              )
-            }
+    function sourceCard(format, source) {
+      const card = el("article", "card source");
+      const icon = el("img");
+      icon.alt = "";
+      icon.loading = "lazy";
+      icon.src = format === "aidoku"
+        ? new URL(source.iconURL, folder).href
+        : `${base}/${source.id}/static/${source.icon}`;
 
-            const json = await response.json()
-            this.repository = json.repository
+      const body = el("div");
+      const top = el("div", "top");
+      top.append(el("h3", null, source.name));
+      const rating = RATINGS[source.contentRating];
+      if (rating) top.append(el("span", "badge", rating));
 
-            // Add capability badges to sources
-            this.sources = json.sources.map((source) => ({
-              ...source,
-              badges: [
-                ...this.getCapabilityBadges(source.capabilities),
-                ...(source.badges || []),
-              ],
-            }))
+      const meta = [`Versione ${source.version}`];
+      const languages = source.languages || (source.language ? [source.language] : []);
+      if (languages.length) meta.push(languages.map(language).join(", "));
+      if (source.baseURL) {
+        try { meta.push(new URL(source.baseURL).host.replace(/^www\./, "")); } catch { /* indirizzo non valido */ }
+      }
+      body.append(top, el("p", "meta", meta.join(" · ")));
+      if (source.description) body.append(el("p", "desc", source.description));
+      card.append(icon, body);
+      card.dataset.search = `${source.name} ${(source.altNames || []).join(" ")} ${source.description || ""}`.toLowerCase();
+      return card;
+    }
 
-            this.buildInfo = {
-              buildTime: json.buildTime,
-              builtWith: json.builtWith,
-            }
-            document.title = this.repository.name
+    function showSources(format, sources) {
+      const list = $("sources");
+      list.replaceChildren();
+      $("count").textContent = sources.length ? `(${sources.length})` : "";
+      if (!sources.length) {
+        list.append(el("p", "empty", "Il repository non ha ancora fonti."));
+        return;
+      }
+      const cards = sources.map((source) => {
+        const card = sourceCard(format, source);
+        list.append(card);
+        return card;
+      });
 
-            // Collect unique badges from all sources by label
-            const badgeMap = new Map()
-            this.sources.forEach((source) => {
-              source.badges?.forEach((badge) => {
-                // If we already have a badge with this label, use the first occurrence
-                if (!badgeMap.has(badge.label)) {
-                  badgeMap.set(badge.label, badge)
-                }
-              })
-            })
-            this.availableBadges = Array.from(badgeMap.values())
-          } catch (err) {
-            console.error('Error initializing repository data:', err)
-            this.error = err.message || 'Failed to load repository data'
-          }
-        },
+      if (sources.length > 6) {
+        const search = $("search");
+        search.hidden = false;
+        search.addEventListener("input", () => {
+          const query = search.value.trim().toLowerCase();
+          for (const card of cards) card.hidden = query !== "" && !card.dataset.search.includes(query);
+        });
+      }
 
-        resetFilters() {
-          this.searchTerm = ''
-          this.selectedBadges = []
-        },
+      // Paperback installa più fonti insieme con un solo link: si scelgono toccando le schede.
+      if (format === "paperback") {
+        const selected = new Set();
+        const install = $("install");
+        const update = () => {
+          $("install-bar").hidden = selected.size === 0;
+          install.textContent = selected.size === 1
+            ? "Installa 1 fonte in Paperback"
+            : `Installa ${selected.size} fonti in Paperback`;
+          install.href = "paperback://installExtensions?data="
+            + btoa(JSON.stringify([...selected].map((id) => [id, base])));
+        };
+        $("hint").hidden = false;
+        sources.forEach((source, index) => {
+          const card = cards[index];
+          card.classList.add("selectable");
+          card.tabIndex = 0;
+          card.setAttribute("role", "checkbox");
+          card.setAttribute("aria-checked", "false");
+          const toggle = () => {
+            const on = !selected.has(source.id);
+            on ? selected.add(source.id) : selected.delete(source.id);
+            card.classList.toggle("selected", on);
+            card.setAttribute("aria-checked", String(on));
+            update();
+          };
+          card.addEventListener("click", toggle);
+          card.addEventListener("keydown", (event) => {
+            if (event.key === " " || event.key === "Enter") { event.preventDefault(); toggle(); }
+          });
+        });
+      }
+    }
 
-        toggleBadgeFilter(badge) {
-          const index = this.selectedBadges.findIndex(
-            (b) => b.label === badge.label
-          )
-          if (index === -1) {
-            this.selectedBadges.push(badge)
-          } else {
-            this.selectedBadges.splice(index, 1)
-          }
-        },
+    $("copy").addEventListener("click", async () => {
+      const copy = $("copy");
+      const text = $("address").textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const field = el("textarea");
+        field.value = text;
+        document.body.append(field);
+        field.select();
+        document.execCommand("copy");
+        field.remove();
+      }
+      copy.textContent = "Copiato ✓";
+      copy.classList.add("done");
+      setTimeout(() => {
+        copy.textContent = "Copia indirizzo";
+        copy.classList.remove("done");
+      }, 2000);
+    });
 
-        getContentRatingClass(rating) {
-          const classes = {
-            MATURE: 'bg-yellow-500 text-yellow-900',
-            ADULT: 'bg-red-500 text-red-100',
-            SAFE: 'bg-green-500 text-green-100',
-          }
-          return classes[rating.toUpperCase()] || 'bg-gray-500 text-gray-100'
-        },
-
-        toggleSource(sourceId) {
-          if (this.selectedSources.has(sourceId)) {
-            this.selectedSources.delete(sourceId)
-          } else {
-            this.selectedSources.add(sourceId)
-          }
-        },
-
-        installSelectedSources() {
-          if (this.selectedSources.size === 0) {
-            alert('Please select at least one source')
-            return
-          }
-          const sourcesToInstall = Array.from(this.selectedSources).map(
-            (id) => [id, this.baseUrl]
-          )
-          window.location.href = `paperback://installExtensions?data=${btoa(
-            JSON.stringify(sourcesToInstall)
-          )}`
-        },
-
-        addToPaperback() {
-          if (!this.repository) {
-            alert('Versioning info is not loaded')
-            return
-          }
-          window.location.href = `paperback://addRepo?displayName=${encodeURI(
-            this.repository.name
-          )}&url=${encodeURI(this.baseUrl)}`
-        },
-
-        sortBadges(badges) {
-          return [...badges].sort((a, b) => {
-            const aSelected = this.selectedBadges.some(
-              (s) => s.label === a.label
-            )
-            const bSelected = this.selectedBadges.some(
-              (s) => s.label === b.label
-            )
-            return bSelected - aSelected
-          })
-        },
-      }))
-    })
+    load()
+      .then(({ format, data }) => {
+        setup(format, data);
+        showSources(format, data.sources || []);
+      })
+      .catch(() => {
+        $("sources").replaceChildren(el("p", "empty", "Non è stato possibile leggere l'elenco delle fonti. Riprova tra poco."));
+      });
   </script>
+</body>
 </html>
