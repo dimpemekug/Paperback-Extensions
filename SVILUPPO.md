@@ -47,6 +47,7 @@ npm test            # controllo dei tipi + test offline dei parser
 npm run test:live   # suite di paperback-cli contro il sito vero (scarica Node 24 con npx)
 npm run bundle      # crea bundles/ (versioning.json, index.js, icona)
 rsvg-convert -w 512 -h 512 assets/icon-mangaworld.svg -o src/MangaWorldITA/static/icon.png
+rsvg-convert -w 256 -h 256 assets/icon-extensions.svg -o assets/icon-extensions.png   # icona del repository
 npm run serve       # serve bundles/ in rete locale, per provarla su iPhone prima del push
 ```
 

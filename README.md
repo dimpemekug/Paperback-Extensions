@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="src/MangaWorldITA/static/icon.png" width="128" alt="MangaWorld ITA">
+<img src="assets/icon-extensions.png" width="128" alt="">
 
 # MangaWorld ITA per Paperback e Legendum
 

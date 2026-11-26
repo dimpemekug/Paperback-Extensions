@@ -1,8 +1,10 @@
 // Customises the homepage paperback-cli generates in bundles/index.html: an "add" button
-// for Legendum beside Paperback's, and the repository address with a copy button.
+// for Legendum beside Paperback's, the repository address with a copy button, and the
+// repository's own icon (assets/icon-extensions.png) in place of Paperback's logo.
 // Run after `paperback-cli bundle`.
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 
 const path = process.argv[2] ?? "bundles/index.html";
 let html = readFileSync(path, "utf8");
@@ -68,5 +70,16 @@ html = html.replace(
   `<div class="flex flex-wrap justify-center">\n        $1\n          Aggiungi a Paperback\n        $2${legendumButton}\n        </div>${addressBox}`,
 );
 html = html.replace(/<html lang="en">/, '<html lang="it">');
+
+const logo = 'src="https://paperback.moe/pb-logo.svg"';
+if (!html.includes(logo)) {
+  throw new Error(`${path}: Paperback's logo was not found, the template changed`);
+}
+html = html
+  .replace(/<link rel="icon" href="https:\/\/paperback\.moe\/pb-logo\.svg" \/>/,
+    '<link rel="icon" href="icon.png" />\n    <link rel="apple-touch-icon" href="icon.png" />')
+  .replace(logo, 'src="icon.png"')
+  .replace('alt="Repository logo"', 'alt=""');
+copyFileSync("assets/icon-extensions.png", join(dirname(path), "icon.png"));
 writeFileSync(path, html);
-console.log(`${path}: address box added`);
+console.log(`${path}: address box and icon added`);
